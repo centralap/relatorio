@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIRME - Cadastro de Monitorado</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #f4f6f9;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .card {
+      max-width: 960px;
+      margin: 40px auto;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    textarea {
+      resize: vertical;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h2 class="text-center mb-4">SIRME - Cadastro de Monitorado</h2>
+      <form id="formulario" class="row g-3">
+        <div class="col-md-6">
+          <label for="dataInicial" class="form-label">Data Inicial:</label>
+          <input type="date" class="form-control" id="dataInicial" required />
+        </div>
+        <div class="col-md-6">
+          <label for="nomeMonitorado" class="form-label">Nome do Monitorado:</label>
+          <input type="text" class="form-control" id="nomeMonitorado" required />
+        </div>
+        <div class="col-md-6">
+          <label for="numeroProcesso" class="form-label">N.º Processo:</label>
+          <input type="text" class="form-control" id="numeroProcesso" required />
+        </div>
+        <div class="col-md-6">
+          <label for="tipoMonitorado" class="form-label">Tipo de Monitorado:</label>
+          <select class="form-select" id="tipoMonitorado" required>
+            <option value="Sentenciado">Sentenciado</option>
+            <option value="Provisório">Provisório</option>
+            <option value="Vítima">Vítima</option>
+            <option value="Medida Cautelar Diversa da Prisão">Medida Cautelar Diversa da Prisão</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label for="grupo" class="form-label">Grupo:</label>
+          <select class="form-select" id="grupo" required>
+            <option value="Regime Aberto">Regime Aberto</option>
+            <option value="Regime Semiaberto">Regime Semiaberto</option>
+            <option value="Regime Semiaberto Harmonizado">Regime Semiaberto Harmonizado</option>
+            <option value="Prisão Civil - Devedor de Alimentos">Prisão Civil - Devedor de Alimentos</option>
+            <option value="Medida Cautelar Diversa da Prisão">Medida Cautelar Diversa da Prisão</option>
+            <option value="Medida Cautelar Diversa da Prisão +PD">Medida Cautelar Diversa da Prisão +PD</option>
+            <option value="Saída Temporária no Regime Semiaberto">Saída Temporária no Regime Semiaberto</option>
+            <option value="Saída Antecipada do Regime Fechado +PD">Saída Antecipada do Regime Fechado +PD</option>
+            <option value="Saída Antecipada do Reg. Semiaberto +PD">Saída Antecipada do Reg. Semiaberto +PD</option>
+            <option value="Prisão Domiciliar Subst. do Reg. Fechado">Prisão Domiciliar Subst. do Reg. Fechado</option>
+            <option value="Prisão Domiciliar Subst. do Reg. SA">Prisão Domiciliar Subst. do Reg. SA</option>
+            <option value="Violência Doméstica e Familiar">Violência Doméstica e Familiar</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label for="origem" class="form-label">Origem:</label>
+          <select class="form-select" id="origem" required>
+            <option value="Varas Criminais">Varas Criminais</option>
+            <option value="Varas de Execução Penal">Varas de Execução Penal</option>
+            <option value="Varas de Família">Varas de Família</option>
+            <option value="Tribunais Superiores">Tribunais Superiores</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label for="frequenciaRelatorio" class="form-label">Frequência do Relatório:</label>
+          <select class="form-select" id="frequenciaRelatorio" required>
+            <option value="30">30 dias</option>
+            <option value="60">60 dias</option>
+            <option value="90">90 dias</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label for="relatorioRealizado" class="form-label">Relatório Realizado:</label>
+          <select class="form-select" id="relatorioRealizado" required>
+            <option value="Não">Não</option>
+            <option value="Sim">Sim</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label for="contato" class="form-label">Contato:</label>
+          <input type="text" class="form-control" id="contato" />
+        </div>
+        <div class="col-md-6">
+          <label for="proximoRelatorio" class="form-label">Próximo Relatório:</label>
+          <input type="date" class="form-control" id="proximoRelatorio" readonly />
+        </div>
+        <div class="col-12">
+          <label for="observacoes" class="form-label">Observações:</label>
+          <textarea class="form-control" id="observacoes" rows="3"></textarea>
+        </div>
+        <div class="col-12 text-center mt-3">
+          <button type="submit" class="btn btn-primary">Salvar Monitorado</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const dataInicialInput = document.getElementById("dataInicial");
+    const frequenciaInput = document.getElementById("frequenciaRelatorio");
+    const proximoInput = document.getElementById("proximoRelatorio");
+
+    function atualizarProximaData() {
+      const data = new Date(dataInicialInput.value);
+      const dias = parseInt(frequenciaInput.value);
+      if (!isNaN(data) && !isNaN(dias)) {
+        data.setDate(data.getDate() + dias);
+        proximoInput.value = data.toISOString().split('T')[0];
+      }
+    }
+
+    dataInicialInput.addEventListener("change", atualizarProximaData);
+    frequenciaInput.addEventListener("change", atualizarProximaData);
+
+    document.getElementById("formulario").addEventListener("submit", function (event) {
+      event.preventDefault();
+      const dados = JSON.parse(localStorage.getItem("monitorados")) || [];
+      const novo = {
+        dataInicial: document.getElementById("dataInicial").value,
+        nomeMonitorado: document.getElementById("nomeMonitorado").value,
+        numeroProcesso: document.getElementById("numeroProcesso").value,
+        tipoMonitorado: document.getElementById("tipoMonitorado").value,
+        grupo: document.getElementById("grupo").value,
+        origem: document.getElementById("origem").value,
+        frequenciaRelatorio: frequenciaInput.value,
+        relatorioRealizado: document.getElementById("relatorioRealizado").value,
+        observacoes: document.getElementById("observacoes").value,
+        contato: document.getElementById("contato").value,
+        proximoRelatorio: proximoInput.value
+      };
+      dados.push(novo);
+      localStorage.setItem("monitorados", JSON.stringify(dados));
+      alert("Monitorado salvo com sucesso!");
+      this.reset();
+      proximoInput.value = "";
+    });
+  </script>
+</body>
+</html>
